@@ -1,0 +1,13 @@
+Communication Module for BBB
+
+BBB as server:
+
+1) Initiate the server on the BBB using
+./server <PortNr>
+2) Connect to BBB using
+./client <BBBipAddress> <PortNr>
+
+BBB as client:
+
+Throught virtual machine there seems to be some IP-issues. It is therefore
+recommended to use the BBB as server and apply a static IP address to it.
