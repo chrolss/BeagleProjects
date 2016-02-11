@@ -55,24 +55,24 @@ int main(int argc, char *argv[])
      //read what the socket has to say
      	 int i = 0;
      	 while (i < 3){
-    	 bzero(buffer,256);
-     	 n = read(newsockfd,buffer,255);
-     	 if (n < 0) error("ERROR reading from socket");
-     	 printf("Here is the message: %s \n",buffer);
-     	 //break communication if client sends "quit"
-     	 std::string str(buffer);
-     	 std::string subst = str.substr(0,4);
-     	 if (subst == "quit"){
-     		 printf("The client has quit the conversation \n");
-     		 n = write(newsockfd, "Closing the connection",22);
-     		 i = 3;
-     	 }
+			 bzero(buffer,256);
+			 n = read(newsockfd,buffer,255);
+			 if (n < 0) error("ERROR reading from socket");
+			 printf("Here is the message: %s \n",buffer);
+			 //break communication if client sends "quit"
+			 std::string str(buffer);
+			 std::string subst = str.substr(0,4);
+			 if (subst == "quit"){
+				 printf("The client has quit the conversation \n");
+				 n = write(newsockfd, "Closing the connection",22);
+				 i = 3;
+			 }
 
-     	 //Write back to client
-     	 else{
-     		 n = write(newsockfd,"I got your message",18);
-     		 if (n < 0) error("ERROR writing to socket");
-     	 }
+			 //Write back to client
+			 else{
+				 n = write(newsockfd,"I got your message",18);
+				 if (n < 0) error("ERROR writing to socket");
+			 }
      }
      //close the socket and remove the connection
      close(newsockfd);
