@@ -4,18 +4,36 @@
 #include <stdlib.h>
 #include <string.h>
 #include <string>
+#include <sstream>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <iostream>
 #include <netinet/in.h>
 
-
+double alpha = 1.5;
+double beta = -1.8;
+double gamma = 0.1;
 
 void error(const char *msg)	//function for catching communication errors
 {
     perror(msg);
     exit(1);
+}
+
+void decodeMessage(char _msg[]){
+  //Should read the buffer array and return string and decode using ":"
+  printf("Here is the msg from decoder: %s \n", _msg);
+}
+
+void sendCodedMessage(int _newsockfd){
+  //Works, but needs cleaning
+  std::ostringstream ostr;
+  ostr.str("");
+  ostr << alpha << ":" << beta << ":" << gamma;
+  std::string s;
+  s = ostr.str();
+  int n = write(_newsockfd,s.c_str(),s.length());
 }
 
 int main(int argc, char *argv[])
@@ -55,24 +73,30 @@ int main(int argc, char *argv[])
      //read what the socket has to say
      	 int i = 0;
      	 while (i < 3){
-			 bzero(buffer,256);
-			 n = read(newsockfd,buffer,255);
-			 if (n < 0) error("ERROR reading from socket");
-			 printf("Here is the message: %s \n",buffer);
-			 //break communication if client sends "quit"
-			 std::string str(buffer);
-			 std::string subst = str.substr(0,4);
-			 if (subst == "quit"){
-				 printf("The client has quit the conversation \n");
-				 n = write(newsockfd, "Closing the connection",22);
-				 i = 3;
+  			 bzero(buffer,256);
+  			 n = read(newsockfd,buffer,255);
+  			 if (n < 0) error("ERROR reading from socket");
+  			 //printf("Here is the message: %s \n",buffer);
+         //Test new function
+         decodeMessage(buffer);
+  			 //break communication if client sends "quit"
+  			 std::string str(buffer);
+  			 std::string subst = str.substr(0,4);
+  			 if (subst == "quit"){
+  				 printf("The client has quit the conversation \n");
+  				 n = write(newsockfd, "Closing the connection",22);
+  				 i = 3;
 			 }
 
 			 //Write back to client
 			 else{
+         //Try the new send function
+         sendCodedMessage(newsockfd);
+         /*
 				 n = write(newsockfd,"I got your message",18);
 				 if (n < 0) error("ERROR writing to socket");
-			 }
+         */
+       }
      }
      //close the socket and remove the connection
      close(newsockfd);
