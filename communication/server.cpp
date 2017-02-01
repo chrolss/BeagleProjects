@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <string>
+#include <fstream> //maybe this is needed for the decodeMessage
 #include <sstream>
 #include <unistd.h>
 #include <sys/types.h>
@@ -14,6 +15,9 @@
 double alpha = 1.5;
 double beta = -1.8;
 double gamma = 0.1;
+double peppu = 0.1;
+double joyVal[4];
+std::string stringArray[4];
 
 void error(const char *msg)	//function for catching communication errors
 {
@@ -21,9 +25,15 @@ void error(const char *msg)	//function for catching communication errors
     exit(1);
 }
 
-void decodeMessage(char _msg[]){
+void decodeMessage(char _msg[],double *_joyVal){
   //Should read the buffer array and return string and decode using ":"
+  std::string testString(_msg);
   printf("Here is the msg from decoder: %s \n", _msg);
+  sscanf(_msg, "%lf:%lf:%lf:%lf", &_joyVal[0], &_joyVal[1], &_joyVal[2], &_joyVal[3]);
+  //sscanf(_msg, "%f:%f:%f:%f", &alpha, &beta, &gamma, &peppu);
+  for (int i = 0; i<5; i++){
+    std::cout << joyVal[i] << std::endl;
+  }
 }
 
 void sendCodedMessage(int _newsockfd){
@@ -78,7 +88,7 @@ int main(int argc, char *argv[])
   			 if (n < 0) error("ERROR reading from socket");
   			 //printf("Here is the message: %s \n",buffer);
          //Test new function
-         decodeMessage(buffer);
+         decodeMessage(buffer, joyVal);
   			 //break communication if client sends "quit"
   			 std::string str(buffer);
   			 std::string subst = str.substr(0,4);
