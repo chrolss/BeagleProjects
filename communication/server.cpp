@@ -15,10 +15,10 @@
 double alpha = 1.5;
 double beta = -1.8;
 double gamma = 0.1;
-double RF = 50.4;
-double RR = 48.7;
-double LR = 47.6;
-double LF = 52.9;
+double RF = 1.0;
+double RR = 2.0;
+double LR = 3.0;
+double LF = 4.0;
 
 double joyVal[4];
 std::string stringArray[4];
@@ -31,7 +31,7 @@ void error(const char *msg)	//function for catching communication errors
 
 void decodeMessage(char _msg[],double *_joyVal){
   printf("Here is the msg from decoder: %s \n", _msg);
-  sscanf(_msg, "%lf:%lf:%lf:%lf", &_joyVal[0], &_joyVal[1], &_joyVal[2], &_joyVal[3]);
+  sscanf(_msg, "%lf:%lf:%lf:%lf:%lf", &_joyVal[0], &_joyVal[1], &_joyVal[2], &_joyVal[3], &_joyVal[4]);
   for (int i = 0; i<5; i++){
     std::cout << joyVal[i] << std::endl;
   }
@@ -88,8 +88,9 @@ int main(int argc, char *argv[])
   			 n = read(newsockfd,buffer,255);
   			 if (n < 0) error("ERROR reading from socket");
   			 //printf("Here is the message: %s \n",buffer);
-         //Test new function
-         decodeMessage(buffer, joyVal);
+
+  			 //Test new function
+  			 decodeMessage(buffer, joyVal);
   			 //break communication if client sends "quit"
   			 std::string str(buffer);
   			 std::string subst = str.substr(0,4);
