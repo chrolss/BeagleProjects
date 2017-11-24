@@ -15,7 +15,11 @@
 double alpha = 1.5;
 double beta = -1.8;
 double gamma = 0.1;
-double peppu = 0.1;
+double RF = 50.4;
+double RR = 48.7;
+double LR = 47.6;
+double LF = 52.9;
+
 double joyVal[4];
 std::string stringArray[4];
 
@@ -26,11 +30,8 @@ void error(const char *msg)	//function for catching communication errors
 }
 
 void decodeMessage(char _msg[],double *_joyVal){
-  //Should read the buffer array and return string and decode using ":"
-  std::string testString(_msg);
   printf("Here is the msg from decoder: %s \n", _msg);
   sscanf(_msg, "%lf:%lf:%lf:%lf", &_joyVal[0], &_joyVal[1], &_joyVal[2], &_joyVal[3]);
-  //sscanf(_msg, "%f:%f:%f:%f", &alpha, &beta, &gamma, &peppu);
   for (int i = 0; i<5; i++){
     std::cout << joyVal[i] << std::endl;
   }
@@ -40,7 +41,7 @@ void sendCodedMessage(int _newsockfd){
   //Works, but needs cleaning
   std::ostringstream ostr;
   ostr.str("");
-  ostr << alpha << ":" << beta << ":" << gamma;
+  ostr << alpha << ":" << beta << ":" << RF << ":" << RR << ":" << LR << ":" << LF;
   std::string s;
   s = ostr.str();
   int n = write(_newsockfd,s.c_str(),s.length());
